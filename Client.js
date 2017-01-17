@@ -3,11 +3,11 @@
 var diameter = require('diameter');
 const avp = require('diameter-avp-object');
 var messageFormatter = require('dvp-common/CommonMessageGenerator/ClientMessageJsonFormatter.js');
-
+var config = require('config');
 
 var relayRealm = 'example.com';
-var relayHost = 'localhost';
-var relayPort = 3868;
+var relayHost = config.Services.relayServiceHost;
+var relayPort = config.Services.relayServicePort;
 
 var callTable = [];
 

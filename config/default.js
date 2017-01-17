@@ -36,9 +36,7 @@ module.exports = {
         "vdomain": "localhost",
         "domain": "localhost",
         "port": "4555",
-        "version": "1.0",
-        "reschedulefreqency": "1",
-        "rescheduletries": "3"
+        "version": "1.0.0.0"
     },
 
     "LBServer" : {
@@ -74,7 +72,10 @@ module.exports = {
         "userServiceVersion": "1.0.0.0",
         "walletServiceHost": "walletservice.app.veery.cloud",
         "walletServicePort": "3333",
-        "walletServiceVersion": "1.0.0.0"
+        "walletServiceVersion": "1.0.0.0",
+
+        "relayServiceHost":"localhost" ,
+        "relayServicePort": 3868
 
 
     }
