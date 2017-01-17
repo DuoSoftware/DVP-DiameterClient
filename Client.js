@@ -24,6 +24,10 @@ function sendReq(req,res,next){
 
     var company =req.user.company;
     var tenant = req.user.tenant;
+    var provider = req.body.provider;
+    var user = req.user.iss;
+    var to = req.body.to;
+    var from = req.body.from;
 
     if(callTable.length ==0){
         var jsonString = messageFormatter.FormatMessage(undefined, "EXCEPTION", false, {message : "Error Call session do not exist"});
@@ -40,7 +44,7 @@ function sendReq(req,res,next){
             request.body = request.body.concat([
                 [ 'Origin-Host', 'localhost' ],
                 [ 'Origin-Realm', 'com' ],
-                [ 'Vendor-Id', 10415 ],
+                [ 'Vendor-Id', 'VOXBONE' ],
                 [ 'Origin-State-Id', 219081 ],
                 [ 'Supported-Vendor-Id', 10415 ],
                 [ 'Auth-Application-Id', 'Diameter Credit Control' ]
@@ -56,8 +60,11 @@ function sendReq(req,res,next){
                     var userinfo = {
                         company : company,
                         tenant : tenant,
-                        to : req.body.to,
-                        from : req.body.from
+                        to : to,
+                        user : user,
+                        from : from,
+                        provider : provider
+
                     };
 
                     var request = connection.createRequest('Diameter Common Messages', 'Credit-Control');
@@ -164,13 +171,8 @@ function endCall (req, res, next){
                     var jsonString = messageFormatter.FormatMessage(undefined, "EXCEPTION", true, {dsid : avpObj.sessionId , message : "successfully ended billing"});
                     res.end(jsonString);
 
-                    calls[index].task.cancel();
-                    calls.splice(index, 1);
-
-
-
-
-
+                    //callTable[index].task.cancel();
+                    callTable.splice(index, 1);
 
 
                 }
@@ -194,6 +196,7 @@ function checkBalance(req, res, next){
 
     var company =req.user.company;
     var tenant = req.user.tenant;
+    var provider = req.body.provider;
 
     var socket = diameter.createConnection(options, function() {
         var connection = socket.diameterConnection;
@@ -201,7 +204,7 @@ function checkBalance(req, res, next){
         request.body = request.body.concat([
             [ 'Origin-Host', 'localhost' ],
             [ 'Origin-Realm', 'com' ],
-            [ 'Vendor-Id', 10415 ],
+            [ 'Vendor-Id', 'VOXBONE' ],
             [ 'Origin-State-Id', 219081 ],
             [ 'Supported-Vendor-Id', 10415 ],
             [ 'Auth-Application-Id', 'Diameter Credit Control' ]
@@ -214,10 +217,13 @@ function checkBalance(req, res, next){
                 var userinfo = {
                     company : company,
                     tenant : tenant,
+                    user : req.user.iss,
                     to : req.body.to,
-                    from : req.body.from
+                    from : req.body.from,
+                    provider :provider
                 };
 
+                console.log(userinfo)
 
                 var request = connection.createRequest('Diameter Common Messages', 'Credit-Control');
                 request.body = request.body.concat([
@@ -225,7 +231,8 @@ function checkBalance(req, res, next){
                     [ 'Origin-Realm', 'com' ],
                     [ 'Vendor-Id', 'VOXBONE' ],
                     [ 'CC-Request-Type' , 'INITIAL_REQUEST'],
-                    [ 'Auth-Application-Id', 'Diameter Credit Control' ]
+                    [ 'Auth-Application-Id', 'Diameter Credit Control' ],
+                    ['Subscription-Id', [ ['Subscription-Id-Type','END_USER_IMSI'],['Subscription-Id-Data', JSON.stringify(userinfo)]]]
 
                 ]);
                 connection.sendRequest(request).then(function(response) {
