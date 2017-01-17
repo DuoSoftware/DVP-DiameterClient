@@ -72,7 +72,7 @@ module.exports = {
         "walletServicePort":  "SYS_WALLETSERVICE_PORT",
         "walletServiceVersion":  "SYS_WALLETSERVICE_VERSION",
 
-        "relayServiceHost":"SYS_RELAYSERVICE_HOST" ,
-        "relayServicePort": "SYS_RELAYSERVICE_PORT"
+        "relayServiceHost":"SYS_DIAMETERRELAY_HOST",
+        "relayServicePort": "SYS_DIAMETERELAY_PORT"
     }
 };
