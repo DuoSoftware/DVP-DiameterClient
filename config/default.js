@@ -75,7 +75,7 @@ module.exports = {
         "walletServiceVersion": "1.0.0.0",
 
         "relayServiceHost":"localhost" ,
-        "relayServicePort": 3868
+        "relayServicePort": 8886
 
 
     }
