@@ -63,7 +63,8 @@ function sendReq(req,res,next){
                         to : to,
                         user : user,
                         from : from,
-                        provider : provider
+                        provider : provider,
+                        csid : req.body.csid
 
                     };
 
@@ -220,7 +221,8 @@ function checkBalance(req, res, next){
                     user : req.user.iss,
                     to : req.body.to,
                     from : req.body.from,
-                    provider :provider
+                    provider :provider,
+                    csid : req.body.csid
                 };
 
                 console.log(userinfo)
