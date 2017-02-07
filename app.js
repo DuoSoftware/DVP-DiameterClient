@@ -12,9 +12,15 @@ var host = config.Host.vdomain || 'localhost';
 var dccaClient = require("./Client");
 
 
+process.on('uncaughtException',function(err){
+    logger.log("UNCAUGHT EXCEPTION");
+    logger.log(err.stack);
+});
+
 var server = restify.createServer({
     name: "DVP Diameter Client API Service"
 });
+
 
 
 
