@@ -192,19 +192,38 @@ function sendReq(req,res,next){
 
 function endCall (req, res, next){
 
+    var company =req.user.company;
+    var tenant = req.user.tenant;
+    var user = req.user.iss;
+    var to = req.body.to;
+    var from = req.body.from;
+
+    var userinfo = {
+        company : company,
+        tenant : tenant,
+        to : to,
+        user : user,
+        from : from,
+        csid : req.body.csid
+
+    };
+
+
 
     var socket = diameter.createConnection(options, function() {
         var connection = socket.diameterConnection;
 
         var request = connection.createRequest('Diameter Common Messages', 'Credit-Control');
         request.body = request.body.concat([
-            //[ 'Session-Id', req.body.dsid ],
+            //[ 'Session-Id', req.body.csid ],
             [ 'Origin-Host', 'localhost' ],
             [ 'Origin-Realm', 'com' ],
             [ 'Vendor-Id', 'VOXBONE' ],
             [ 'CC-Request-Type' , 'EVENT_REQUEST'],
             [ 'Requested-Action' , 'DIRECT_DEBITING' ],
-            [ 'Auth-Application-Id', 'Diameter Credit Control' ]
+            [ 'Auth-Application-Id', 'Diameter Credit Control' ],
+            ['Subscription-Id', [ ['Subscription-Id-Type','END_USER_IMSI'],['Subscription-Id-Data', JSON.stringify(userinfo)]]]
+
         ]);
 
         //validate call session id, if session is closed send request
@@ -213,7 +232,7 @@ function endCall (req, res, next){
             if(avpObj.resultCode=='DIAMETER_SUCCESS'){
                 console.log(avpObj.resultCode);
 
-                var jsonString = messageFormatter.FormatMessage(undefined, "EXCEPTION", true, {dsid : avpObj.sessionId , message : "successfully ended billing"});
+                var jsonString = messageFormatter.FormatMessage(undefined, "EXCEPTION", true, {csid : avpObj.sessionId , message : "successfully ended billing"});
                 res.end(jsonString);
 
                 //callTable[index].task.cancel();
