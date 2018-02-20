@@ -13,7 +13,7 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
     "diameter": "^0.7.0",
-    "diameter-avp-object": "1.0.6",
+    "diameter-avp-object": "1.0.1",
     "dvp-common": "^0.8.4",
     "dvp-dbmodels": "^0.6.8",
     "express": "~4.13.4",
