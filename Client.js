@@ -45,8 +45,8 @@ function checkBalance(req, res, next){
                     company : company,
                     tenant : tenant,
                     user : req.user.iss,
-                    to : req.body.to,
-                    from : req.body.from,
+                    to : numberFormatter(req.body.to),
+                    from : numberFormatter(req.body.from),
                     provider :provider,
                     csid : req.body.csid
                 };
@@ -103,8 +103,8 @@ function sendReq(req,res,next){
     var tenant = req.user.tenant;
     var provider = req.body.provider;
     var user = req.user.iss;
-    var to = req.body.to;
-    var from = req.body.from;
+    var to = numberFormatter(req.body.to);
+    var from = numberFormatter(req.body.from);
 
 
     var socket = diameter.createConnection(options, function() {
@@ -195,8 +195,8 @@ function endCall (req, res, next){
     var company =req.user.company;
     var tenant = req.user.tenant;
     var user = req.user.iss;
-    var to = req.body.to;
-    var from = req.body.from;
+    var to = numberFormatter(req.body.to);
+    var from = numberFormatter(req.body.from);
 
     var userinfo = {
         company : company,
@@ -246,6 +246,23 @@ function endCall (req, res, next){
 
 
 }
+
+
+function numberFormatter(number){
+
+    if((number.toString()).slice(0,2) === "00"){
+
+        var newNumber = number.slice( 2 );
+        return("+"+newNumber);
+
+    }
+    else {
+
+        return("+"+number);
+    }
+
+}
+
 
 
 
