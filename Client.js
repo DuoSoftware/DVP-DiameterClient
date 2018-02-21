@@ -209,7 +209,6 @@ function endCall (req, res, next){
     };
 
 
-
     var socket = diameter.createConnection(options, function() {
         var connection = socket.diameterConnection;
 
