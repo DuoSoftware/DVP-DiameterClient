@@ -249,7 +249,11 @@ function endCall (req, res, next){
 
 function numberFormatter(number){
 
-    if((number.toString()).slice(0,2) === "00"){
+    if(number.slice(0,1) === "+"){
+        return number
+    }
+
+    else if((number.toString()).slice(0,2) === "00"){
 
         var newNumber = number.slice( 2 );
         return("+"+newNumber);
@@ -261,7 +265,6 @@ function numberFormatter(number){
     }
 
 }
-
 
 
 
